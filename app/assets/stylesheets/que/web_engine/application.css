@@ -1,0 +1,76 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600&display=swap&subset=cyrillic');
+
+* {
+  font-family: 'Source Sans Pro';
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  max-width: 62.5rem;
+  width: 100%;
+}
+
+.row .column {
+  flex: 1;
+  padding: 1rem;
+}
+
+.dashboard-stat {
+  text-align: center;
+  display: table;
+  width: 100%;
+}
+
+.dashboard-stat .cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 200px;
+}
+
+.dashboard-stat h2 {
+  font-size: 1rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.dashboard-stat.total {
+  background: #828E8C;
+}
+
+.dashboard-stat.scheduled {
+  background: #828E8C;
+}
+
+.dashboard-stat.running {
+  background: #CFD0C1;
+}
+
+.dashboard-stat.failing {
+  background: #E8866C;
+}
+
+.dashboard-value {
+  font-size: 5rem;
+  line-height: 5rem;
+  color: black;
+}
