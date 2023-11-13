@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Que
-  module WebEngine
+  module View
     module ApplicationHelper
     end
   end

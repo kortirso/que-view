@@ -1,4 +1,4 @@
-# Que::WebEngine
+# Que::View
 Short description and motivation.
 
 ## Usage

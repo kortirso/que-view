@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Que
-  module WebEngine
+  module View
     class Configuration
       attr_accessor :ui_username, :ui_password, :ui_secured_environments
 

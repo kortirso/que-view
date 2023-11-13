@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require_relative 'lib/que/web_engine/version'
+require_relative 'lib/que/view/version'
 
 Gem::Specification.new do |spec|
-  spec.name        = 'que-web_engine'
-  spec.version     = Que::WebEngine::VERSION
+  spec.name        = 'que-view'
+  spec.version     = Que::View::VERSION
   spec.authors     = ['Bogdanov Anton']
   spec.email       = ['kortirso@gmail.com']
-  spec.homepage    = 'https://github.com/kortirso/que-web_engine'
+  spec.homepage    = 'https://github.com/kortirso/que-view'
   spec.summary     = 'Web interface for Que.'
-  spec.description = 'Rails engine as web interface for Que.'
+  spec.description = 'Rails engine as web interface for Que for inspecting jobs.'
   spec.license     = 'MIT'
 
   spec.required_ruby_version = '>= 2.7'
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
-  spec.metadata['changelog_uri'] = 'https://github.com/kortirso/que-web_engine/blob/master/CHANGELOG.md'
+  spec.metadata['changelog_uri'] = 'https://github.com/kortirso/que-view/blob/master/CHANGELOG.md'
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
