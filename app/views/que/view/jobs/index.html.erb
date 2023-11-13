@@ -1,0 +1,35 @@
+<div class="row">
+  <% if @jobs.size.positive? %>
+    <table cellspacing="0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Failures</th>
+          <th>Job</th>
+          <th>Queue</th>
+          <th>Error</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @jobs.each do |job| %>
+          <tr>
+            <td><%= job[:id] %></td>
+            <td><%= job[:error_count] %></td>
+            <td><%= humanized_job_class(job) %></td>
+            <td><%= job[:queue] %></td>
+            <td><%= format_error(job) %></td>
+            <td>
+              <%= button_to 'Delete', job_path(job[:id]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete job?')" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No jobs found</p>
+  <% end %>
+</div>
+<% if @jobs_amount.positive? %>
+  <%= button_to 'Delete All', destroy_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete all jobs?')" %>
+<% end %>

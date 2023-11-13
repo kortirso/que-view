@@ -28,15 +28,28 @@
   width: 100%;
 }
 
-.row .column {
+.row .column, .row table {
   flex: 1;
   padding: 1rem;
+}
+
+table th, table td {
+  padding: .25rem .75rem;
+  border-bottom: 1px solid #999;
+}
+
+table tbody tr:nth-of-type(2n) {
+  background: #DDD;
 }
 
 .dashboard-stat {
   text-align: center;
   display: table;
   width: 100%;
+}
+
+.dashboard-stat a {
+  text-decoration: none;
 }
 
 .dashboard-stat .cell {
@@ -47,6 +60,7 @@
 }
 
 .dashboard-stat h2 {
+  color: #222;
   font-size: 1rem;
   font-weight: normal;
   text-transform: uppercase;

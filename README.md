@@ -9,7 +9,7 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'que'
-gem 'que-web_engine'
+gem 'que-view'
 ```
 
 And then execute:
@@ -19,7 +19,7 @@ $ bundle install
 
 Or install it yourself as:
 ```bash
-$ gem install que-web_engine
+$ gem install que-view
 ```
 
 ## Contributing

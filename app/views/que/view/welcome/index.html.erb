@@ -1,15 +1,5 @@
 <div class="row">
   <div class="column">
-    <div class="dashboard-stat total">
-      <div class="cell">
-        <h2>Total</h2>
-        <span class="dashboard-value">
-          <%= @dashboard_stats[:total] %>
-        </span>
-      </div>
-    </div>
-  </div>
-  <div class="column">
     <div class="dashboard-stat running">
       <div class="cell">
         <h2>Running</h2>
@@ -31,12 +21,14 @@
   </div>
   <div class="column">
     <div class="dashboard-stat failing">
-      <div class="cell">
-        <h2>Failing</h2>
-        <span class="dashboard-value">
-          <%= @dashboard_stats[:failing] %>
-        </span>
-      </div>
+      <%= link_to jobs_path(status: 'failing') do %>
+        <div class="cell">
+          <h2>Failing</h2>
+          <span class="dashboard-value">
+            <%= @dashboard_stats[:failing] %>
+          </span>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

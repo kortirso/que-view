@@ -34,6 +34,6 @@ module Que
 
     # Public: All the methods delegated to instance. These should match the interface of Que::View::DSL.
     def_delegators :instance,
-                   :dashboard_stats
+                   :dashboard_stats, :failing_jobs, :delete_all_failing_jobs
   end
 end
