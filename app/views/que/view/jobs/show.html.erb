@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="columns">
+    <h1>Job <%= @job[:id] %></h1>
+  </div>
+</div>
+<div class="row">
+  <table cellspacing="0">
+    <tbody>
+      <tr>
+        <th>Job</th>
+        <td><%= humanized_job_class(@job) %></td>
+      </tr>
+      <tr>
+        <th>Queue</th>
+        <td><%= @job[:queue] %></td>
+      </tr>
+      <tr>
+        <th>Priority</th>
+        <td><%= @job[:priority] %></td>
+      </tr>
+      <tr>
+        <th>Run at</th>
+        <td><%= @job[:run_at].utc %></td>
+      </tr>
+      <tr>
+        <th>Failures</th>
+        <td><%= @job[:error_count] %></td>
+      </tr>
+      <tr>
+        <th>Args</th>
+        <td>
+          <% @job.dig(:args, 0, :arguments).each do |argument| %>
+            <p><%= argument %></p>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <th>Last Error</th>
+        <td>
+          <%= format_error(@job) %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="row">
+  <div class="actions">
+    <%= button_to 'Run', job_path(@job[:id]), class: 'btn-danger', method: :patch, onclick: "return confirm('Are you sure you wish to reschedule job?')" %>
+    <%= button_to 'Delete', job_path(@job[:id]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete job?')" %>
+  </div>
+</div>

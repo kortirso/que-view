@@ -1,22 +1,26 @@
 <div class="row">
   <div class="column">
     <div class="dashboard-stat running">
-      <div class="cell">
-        <h2>Running</h2>
-        <span class="dashboard-value">
-          <%= @dashboard_stats[:running] %>
-        </span>
-      </div>
+      <%= link_to jobs_path(status: 'running') do %>
+        <div class="cell">
+          <h2>Running</h2>
+          <span class="dashboard-value">
+            <%= @dashboard_stats[:running] %>
+          </span>
+        </div>
+      <% end %>
     </div>
   </div>
   <div class="column">
     <div class="dashboard-stat scheduled">
-      <div class="cell">
-        <h2>Scheduled</h2>
-        <span class="dashboard-value">
-          <%= @dashboard_stats[:scheduled] %>
-        </span>
-      </div>
+      <%= link_to jobs_path(status: 'scheduled') do %>
+        <div class="cell">
+          <h2>Scheduled</h2>
+          <span class="dashboard-value">
+            <%= @dashboard_stats[:scheduled] %>
+          </span>
+        </div>
+      <% end %>
     </div>
   </div>
   <div class="column">
