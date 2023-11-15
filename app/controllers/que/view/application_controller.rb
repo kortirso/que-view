@@ -15,7 +15,7 @@ module Que
         return false if configuration.ui_username.blank?
         return false if configuration.ui_password.blank?
 
-        configuration.ui_secured_environments.include?(Rails.env)
+        configuration.ui_secured_environments.include?(::Rails.env)
       end
     end
   end
