@@ -57,7 +57,7 @@ module Que
 
       def find_jobs(status)
         case status&.to_sym
-        when :failed then ::Que::View.fetch_failed_jobs(PER_PAGE, offset, search)
+        when :failing then ::Que::View.fetch_failing_jobs(PER_PAGE, offset, search)
         when :scheduled then ::Que::View.fetch_scheduled_jobs(PER_PAGE, offset, search)
         else []
         end
@@ -69,17 +69,17 @@ module Que
 
       def reschedule_all_jobs(status, time)
         case status&.to_sym
-        when :failed then ::Que::View.reschedule_failed_jobs(time)
+        when :failing then ::Que::View.reschedule_failing_jobs(time)
         when :scheduled then ::Que::View.reschedule_scheduled_jobs(time)
-        else 0
+        else []
         end
       end
 
       def destroy_all_jobs(status)
         case status&.to_sym
-        when :failed then ::Que::View.delete_failed_jobs
+        when :failing then ::Que::View.delete_failing_jobs
         when :scheduled then ::Que::View.delete_scheduled_jobs
-        else 0
+        else []
         end
       end
 
