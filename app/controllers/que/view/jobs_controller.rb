@@ -9,7 +9,7 @@ module Que
 
       def index
         @jobs = find_jobs(params[:status])
-        @jobs_total_amount = find_jobs_total_amount(params[:status])
+        paginate
       end
 
       def show; end
@@ -48,6 +48,19 @@ module Que
 
       private
 
+      def paginate
+        return if %w[failing scheduled].exclude?(params[:status])
+        return unless @jobs.any?
+
+        @pagination = Que::View::Pagination.new(
+          params: {
+            page: page,
+            per_page: params[:per_page] || PER_PAGE,
+            count: find_jobs_total_amount(params[:status])
+          }
+        )
+      end
+
       def find_job
         @job = ::Que::View.fetch_job(params[:id])[0]
         return if @job
@@ -57,7 +70,7 @@ module Que
 
       def find_jobs(status)
         case status&.to_sym
-        when :running then ::Que::View.fetch_running_jobs(PER_PAGE, offset, search)
+        when :running then ::Que::View.fetch_running_jobs(search)
         when :failing then ::Que::View.fetch_failing_jobs(PER_PAGE, offset, search)
         when :scheduled then ::Que::View.fetch_scheduled_jobs(PER_PAGE, offset, search)
         else []
@@ -97,12 +110,12 @@ module Que
         sanitised
       end
 
-      def page
-        (params[:page] || 1).to_i
-      end
-
       def offset
         (page - 1) * PER_PAGE
+      end
+
+      def page
+        (params[:page] || 1).to_i
       end
     end
   end

@@ -48,11 +48,11 @@ table th {
 }
 
 table tbody tr:nth-of-type(2n), table tbody tr:hover {
-  background: #DDD;
+  background: #EEE;
 }
 
 table tbody tr:nth-of-type(2n):hover {
-  background: #CCC;
+  background: #DDD;
 }
 
 table p {
@@ -113,6 +113,28 @@ table p {
   background: #E8866C;
   padding: .25rem .5rem;
   margin-right: .5rem;
+}
+
+.navigation {
+  margin: 1rem auto;
+}
+
+.navigation .navigation-link {
+  margin: 0 .5rem 0 0;
+  padding: .25rem .5rem;
+  background: #fde68a;
+  border: 1px solid #fcd34d;
+  border-radius: .25rem;
+  text-decoration: none;
+}
+
+.navigation .navigation-link.disabled {
+  background: #fef3c7;
+}
+
+.navigation .total-pages {
+  margin: 0 .5rem 0 0;
+  padding: .25rem .5rem;
 }
 
 @media screen and (max-width: 768px) {

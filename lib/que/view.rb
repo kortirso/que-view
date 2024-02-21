@@ -6,6 +6,7 @@ require 'que/view/version'
 require 'que/view/engine'
 require 'que/view/configuration'
 require 'que/view/dsl'
+require 'que/view/pagination'
 
 module Que
   module View

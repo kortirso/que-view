@@ -1,5 +1,24 @@
-<div class="row">
-  <% if @jobs.size.positive? %>
+<% if @jobs.any? %>
+  <% if @pagination %>
+    <div class="row navigation">
+      <% if @pagination.previous_page? %>
+        <%= link_to 'First', jobs_path(status: params[:status], page: 1), class: 'navigation-link' %>
+        <%= link_to '< Previous', jobs_path(status: params[:status], page: @pagination.previous_page), class: 'navigation-link' %>
+      <% else %>
+        <p class="navigation-link disabled">First</p>
+        <p class="navigation-link disabled">&#60; Previous</p>
+      <% end %>
+      <p class="total-pages"><%= "Page #{@pagination.page} of #{@pagination.total_pages}" %></p>
+      <% if @pagination.next_page? %>
+        <%= link_to 'Next >', jobs_path(status: params[:status], page: @pagination.next_page), class: 'navigation-link' %>
+        <%= link_to 'Last', jobs_path(status: params[:status], page: @pagination.total_pages), class: 'navigation-link' %>
+      <% else %>
+        <p class="navigation-link disabled">Next &#62;</p>
+        <p class="navigation-link disabled">Last </p>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="row">
     <table cellspacing="0">
       <thead>
         <tr>
@@ -45,11 +64,13 @@
         <% end %>
       </tbody>
     </table>
-  <% else %>
+  </div>
+<% else %>
+  <div class="row">
     <p>No jobs found</p>
-  <% end %>
-</div>
-<% if %w[failing scheduled].include?(params[:status]) && @jobs_total_amount.positive? %>
+  </div>
+<% end %>
+<% if @pagination&.count&.positive? %>
   <div class="row">
     <%= button_to 'Run All', reschedule_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :post, onclick: "return confirm('Are you sure you wish to reschedule all jobs?')" %>
     <%= button_to 'Delete All', destroy_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete all jobs?')" %>

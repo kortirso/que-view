@@ -51,7 +51,7 @@ Add this line to assets/config/manifest.js
 - [ ] better styles for UI
 - [X] rendering running jobs
 - [ ] searching/filtering through jobs by name, queue
-- [ ] pagination for jobs list page
+- [X] pagination for jobs list page
 - [ ] tests
 
 ## License
