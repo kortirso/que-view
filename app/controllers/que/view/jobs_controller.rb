@@ -9,7 +9,7 @@ module Que
 
       def index
         @jobs = find_jobs(params[:status])
-        @jobs_amount = find_jobs_amount(params[:status])
+        @jobs_total_amount = find_jobs_total_amount(params[:status])
       end
 
       def show; end
@@ -57,13 +57,14 @@ module Que
 
       def find_jobs(status)
         case status&.to_sym
+        when :running then ::Que::View.fetch_running_jobs(PER_PAGE, offset, search)
         when :failing then ::Que::View.fetch_failing_jobs(PER_PAGE, offset, search)
         when :scheduled then ::Que::View.fetch_scheduled_jobs(PER_PAGE, offset, search)
         else []
         end
       end
 
-      def find_jobs_amount(status)
+      def find_jobs_total_amount(status)
         ::Que::View.fetch_dashboard_stats(search)[0][status&.to_sym]
       end
 

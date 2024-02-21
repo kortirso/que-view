@@ -49,7 +49,9 @@ Add this line to assets/config/manifest.js
 - [X] rescheduling jobs
 - [X] deleting jobs
 - [ ] better styles for UI
-- [ ] rendering running jobs
+- [X] rendering running jobs
+- [ ] searching/filtering through jobs by name, queue
+- [ ] pagination for jobs list page
 - [ ] tests
 
 ## License

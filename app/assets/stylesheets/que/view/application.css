@@ -114,3 +114,9 @@ table p {
   padding: .25rem .5rem;
   margin-right: .5rem;
 }
+
+@media screen and (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+}

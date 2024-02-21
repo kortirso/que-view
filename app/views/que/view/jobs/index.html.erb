@@ -6,8 +6,8 @@
           <th>ID</th>
           <th>Run at</th>
           <th>Job</th>
-          <th>Arguments</th>
           <th>Queue</th>
+          <th>Arguments</th>
           <% if params[:status] == 'failing' %>
             <th>Failures</th>
             <th>Error</th>
@@ -34,9 +34,11 @@
               <td><%= format_error(job) %></td>
             <% end %>
             <% if %w[failing scheduled].include?(params[:status]) %>
-              <td class="actions">
-                <%= button_to 'Run', job_path(job[:id]), class: 'btn-danger', method: :patch, onclick: "return confirm('Are you sure you wish to reschedule job?')" %>
-                <%= button_to 'Delete', job_path(job[:id]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete job?')" %>
+              <td>
+                <div class="actions">
+                  <%= button_to 'Run', job_path(job[:id]), class: 'btn-danger', method: :patch, onclick: "return confirm('Are you sure you wish to reschedule job?')" %>
+                  <%= button_to 'Delete', job_path(job[:id]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete job?')" %>
+                </div>
               </td>
             <% end %>
           </tr>
@@ -47,7 +49,7 @@
     <p>No jobs found</p>
   <% end %>
 </div>
-<% if %w[failing scheduled].include?(params[:status]) && @jobs_amount.positive? %>
+<% if %w[failing scheduled].include?(params[:status]) && @jobs_total_amount.positive? %>
   <div class="row">
     <%= button_to 'Run All', reschedule_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :post, onclick: "return confirm('Are you sure you wish to reschedule all jobs?')" %>
     <%= button_to 'Delete All', destroy_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete all jobs?')" %>

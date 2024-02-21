@@ -8,6 +8,10 @@ module Que
         execute(fetch_dashboard_stats_sql(...))
       end
 
+      def fetch_running_jobs(...)
+        Que.job_states
+      end
+
       def fetch_failing_jobs(...)
         execute(fetch_failing_jobs_sql(...))
       end
