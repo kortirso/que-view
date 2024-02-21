@@ -20,7 +20,7 @@
       </tr>
       <tr>
         <th>Run at</th>
-        <td><%= @job[:run_at].utc %></td>
+        <td><%= @job[:run_at].strftime("%Y-%m-%d %H:%M:%S") %></td>
       </tr>
       <tr>
         <th>Failures</th>

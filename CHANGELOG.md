@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - rendering running jobs
 - pagination for jobs list page
 
+### Modified
+- better styles for UI
+
 ## [0.2.3] - 2023-12-01
 ### Fixed
 - jobs status naming

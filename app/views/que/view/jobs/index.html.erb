@@ -1,20 +1,20 @@
 <% if @jobs.any? %>
   <% if @pagination %>
-    <div class="row navigation">
+    <div class="row pagination">
       <% if @pagination.previous_page? %>
-        <%= link_to 'First', jobs_path(status: params[:status], page: 1), class: 'navigation-link' %>
-        <%= link_to '< Previous', jobs_path(status: params[:status], page: @pagination.previous_page), class: 'navigation-link' %>
+        <%= link_to 'First', jobs_path(status: params[:status], page: 1), class: 'pagination-link' %>
+        <%= link_to '< Previous', jobs_path(status: params[:status], page: @pagination.previous_page), class: 'pagination-link' %>
       <% else %>
-        <p class="navigation-link disabled">First</p>
-        <p class="navigation-link disabled">&#60; Previous</p>
+        <p class="pagination-link disabled">First</p>
+        <p class="pagination-link disabled">&#60; Previous</p>
       <% end %>
       <p class="total-pages"><%= "Page #{@pagination.page} of #{@pagination.total_pages}" %></p>
       <% if @pagination.next_page? %>
-        <%= link_to 'Next >', jobs_path(status: params[:status], page: @pagination.next_page), class: 'navigation-link' %>
-        <%= link_to 'Last', jobs_path(status: params[:status], page: @pagination.total_pages), class: 'navigation-link' %>
+        <%= link_to 'Next >', jobs_path(status: params[:status], page: @pagination.next_page), class: 'pagination-link' %>
+        <%= link_to 'Last', jobs_path(status: params[:status], page: @pagination.total_pages), class: 'pagination-link' %>
       <% else %>
-        <p class="navigation-link disabled">Next &#62;</p>
-        <p class="navigation-link disabled">Last </p>
+        <p class="pagination-link disabled">Next &#62;</p>
+        <p class="pagination-link disabled">Last </p>
       <% end %>
     </div>
   <% end %>
@@ -40,7 +40,7 @@
         <% @jobs.each do |job| %>
           <tr>
             <td><%= link_to job[:id], job_path(job[:id]) %></td>
-            <td><%= job[:run_at].utc %></td>
+            <td><%= job[:run_at].strftime("%Y-%m-%d %H:%M:%S") %></td>
             <td><%= humanized_job_class(job) %></td>
             <td><%= job[:queue] %></td>
             <td>

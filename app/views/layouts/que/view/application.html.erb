@@ -7,6 +7,27 @@
     <%= stylesheet_link_tag 'que/view/application', media: 'all' %>
   </head>
   <body>
+    <nav class="navigation" role="navigation">
+      <h1><%= link_to 'Que View', root_path %></h1>
+      <section class="navigation-section">
+        <ul>
+          <li class="<%= 'active' if params[:status] == 'running' %>">
+            <%= link_to 'Running', jobs_path(status: 'running') %>
+          </li>
+          <li class="<%= 'active' if params[:status] == 'scheduled' %>">
+            <%= link_to 'Scheduled', jobs_path(status: 'scheduled') %>
+          </li>
+          <li class="<%= 'active' if params[:status] == 'failing' %>">
+            <%= link_to 'Failing', jobs_path(status: 'failing') %>
+          </li>
+        </ul>
+        <ul class="version">
+          <li>Que <%= Que::VERSION %></li>
+          <li>Que View <%= Que::View::VERSION %></li>
+          <li><%= Time.now.utc.strftime("%Y-%m-%d %H:%M:%S") %></li>
+        </ul>
+      </section>
+    </nav>
     <%= yield %>
   </body>
 </html>

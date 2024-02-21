@@ -20,6 +20,11 @@
   font-family: 'Source Sans Pro';
 }
 
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
 .row {
   display: flex;
   flex-direction: row;
@@ -115,11 +120,11 @@ table p {
   margin-right: .5rem;
 }
 
-.navigation {
+.pagination {
   margin: 1rem auto;
 }
 
-.navigation .navigation-link {
+.pagination .pagination-link {
   margin: 0 .5rem 0 0;
   padding: .25rem .5rem;
   background: #fde68a;
@@ -128,13 +133,58 @@ table p {
   text-decoration: none;
 }
 
-.navigation .navigation-link.disabled {
+.pagination .pagination-link.disabled {
   background: #fef3c7;
 }
 
-.navigation .total-pages {
+.pagination .total-pages {
   margin: 0 .5rem 0 0;
   padding: .25rem .5rem;
+}
+
+.navigation {
+  display: flex;
+  padding: .5rem 1rem;
+  background: #52525b;
+  color: #fff;
+}
+
+.navigation h1 {
+  margin: 0 2rem 0 0;
+}
+
+.navigation h1 a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.navigation .navigation-section {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navigation .navigation-section ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+
+.navigation .navigation-section ul.version li {
+  margin-left: 1rem;
+}
+
+.navigation .navigation-section ul li a {
+  display: inline-block;
+  padding: .5rem;
+  text-decoration: none;
+  color: #fff;
+}
+
+.navigation .navigation-section ul li.active a {
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 768px) {
