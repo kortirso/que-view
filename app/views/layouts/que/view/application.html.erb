@@ -11,14 +11,20 @@
       <h1><%= link_to 'Que View', root_path %></h1>
       <section class="navigation-section">
         <ul>
-          <li class="<%= 'active' if params[:status] == 'running' %>">
-            <%= link_to 'Running', jobs_path(status: 'running') %>
-          </li>
           <li class="<%= 'active' if params[:status] == 'scheduled' %>">
             <%= link_to 'Scheduled', jobs_path(status: 'scheduled') %>
           </li>
           <li class="<%= 'active' if params[:status] == 'failing' %>">
             <%= link_to 'Failing', jobs_path(status: 'failing') %>
+          </li>
+          <li class="<%= 'active' if params[:status] == 'running' %>">
+            <%= link_to 'Running', jobs_path(status: 'running') %>
+          </li>
+          <li class="<%= 'active' if params[:status] == 'finished' %>">
+            <%= link_to 'Finished', jobs_path(status: 'finished') %>
+          </li>
+          <li class="<%= 'active' if params[:status] == 'expired' %>">
+            <%= link_to 'Expired', jobs_path(status: 'expired') %>
           </li>
         </ul>
         <ul class="version">
@@ -28,6 +34,8 @@
         </ul>
       </section>
     </nav>
-    <%= yield %>
+    <section class="content">
+      <%= yield %>
+    </section>
   </body>
 </html>

@@ -53,10 +53,12 @@ module Que
       # rubocop: disable Metrics/MethodLength
       def fetch_dashboard_stats_sql(search)
         <<-SQL.squish
-          SELECT count(*)                    AS total,
-                 count(locks.job_id)         AS running,
+          SELECT count(*) AS total,
+                 count(locks.job_id) AS running,
                  coalesce(sum((error_count > 0 AND locks.job_id IS NULL)::int), 0) AS failing,
-                 coalesce(sum((error_count = 0 AND locks.job_id IS NULL)::int), 0) AS scheduled
+                 coalesce(sum((error_count = 0 AND locks.job_id IS NULL)::int), 0) AS scheduled,
+                 coalesce(sum((finished_at IS NOT NULL)::int), 0) AS finished,
+                 coalesce(sum((expired_at IS NOT NULL)::int), 0) AS expired
           FROM que_jobs
           LEFT JOIN (
             SELECT (classid::bigint << 32) + objid::bigint AS job_id

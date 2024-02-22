@@ -1,38 +1,60 @@
-<div class="row">
-  <div class="column">
-    <div class="dashboard-stat running">
-      <%= link_to jobs_path(status: 'running') do %>
-        <div class="cell">
-          <h2>Running</h2>
-          <span class="dashboard-value">
-            <%= @dashboard_stats[:running] %>
-          </span>
-        </div>
-      <% end %>
+<div class="dashboard-row">
+  <div class="dashboard-stat">
+    <div class="cell">
+      <h2>Total</h2>
+      <span class="dashboard-value">
+        <%= @dashboard_stats[:total] %>
+      </span>
     </div>
   </div>
-  <div class="column">
-    <div class="dashboard-stat scheduled">
-      <%= link_to jobs_path(status: 'scheduled') do %>
-        <div class="cell">
-          <h2>Scheduled</h2>
-          <span class="dashboard-value">
-            <%= @dashboard_stats[:scheduled] %>
-          </span>
-        </div>
-      <% end %>
-    </div>
+  <div class="dashboard-stat">
+    <%= link_to jobs_path(status: 'scheduled') do %>
+      <div class="cell">
+        <h2>Scheduled</h2>
+        <span class="dashboard-value">
+          <%= @dashboard_stats[:scheduled] %>
+        </span>
+      </div>
+    <% end %>
   </div>
-  <div class="column">
-    <div class="dashboard-stat failing">
-      <%= link_to jobs_path(status: 'failing') do %>
-        <div class="cell">
-          <h2>Failing</h2>
-          <span class="dashboard-value">
-            <%= @dashboard_stats[:failing] %>
-          </span>
-        </div>
-      <% end %>
-    </div>
+  <div class="dashboard-stat">
+    <%= link_to jobs_path(status: 'failing') do %>
+      <div class="cell">
+        <h2>Failing</h2>
+        <span class="dashboard-value">
+          <%= @dashboard_stats[:failing] %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <div class="dashboard-stat">
+    <%= link_to jobs_path(status: 'running') do %>
+      <div class="cell">
+        <h2>Running</h2>
+        <span class="dashboard-value">
+          <%= @dashboard_stats[:running] %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <div class="dashboard-stat">
+    <%= link_to jobs_path(status: 'finished') do %>
+      <div class="cell">
+        <h2>Finished</h2>
+        <span class="dashboard-value">
+          <%= @dashboard_stats[:finished] %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <div class="dashboard-stat">
+    <%= link_to jobs_path(status: 'expired') do %>
+      <div class="cell">
+        <h2>Expired</h2>
+        <span class="dashboard-value">
+          <%= @dashboard_stats[:expired] %>
+        </span>
+      </div>
+    <% end %>
   </div>
 </div>
