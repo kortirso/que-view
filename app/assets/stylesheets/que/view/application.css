@@ -21,26 +21,16 @@
 }
 
 html, body {
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
-  margin: 0 auto;
-  max-width: 75rem;
-  width: 100%;
+body {
+  background: #fafafa;
 }
 
-.row .column {
-  flex: 1;
+.content {
   padding: 1rem;
-}
-
-.row table {
-  flex: 1;
-  margin-bottom: 1rem;
 }
 
 table th, table td {
@@ -68,24 +58,43 @@ table p {
   display: flex;
 }
 
-.dashboard-stat {
+.dashboard-row {
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  border: 1px solid #a8a29e;
+  border-radius: .25rem;
+  overflow: hidden;
+}
+
+.dashboard-row .dashboard-stat {
   text-align: center;
   display: table;
   width: 100%;
+  background: #fff;
+  border-right: 1px solid #a8a29e;
 }
 
-.dashboard-stat a {
+.dashboard-row .dashboard-stat:hover {
+  background: #f5f5f4;
+}
+
+.dashboard-row .dashboard-stat:nth-last-of-type(1) {
+  border: none;
+}
+
+.dashboard-row .dashboard-stat a {
   text-decoration: none;
 }
 
-.dashboard-stat .cell {
+.dashboard-row .dashboard-stat .cell {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 200px;
+  height: 150px;
 }
 
-.dashboard-stat h2 {
+.dashboard-row .dashboard-stat h2 {
   color: #222;
   font-size: 1rem;
   font-weight: normal;
@@ -93,21 +102,9 @@ table p {
   margin: 0;
 }
 
-.dashboard-stat.running {
-  background: #CFD0C1;
-}
-
-.dashboard-stat.scheduled {
-  background: #828E8C;
-}
-
-.dashboard-stat.failing {
-  background: #E8866C;
-}
-
 .dashboard-value {
-  font-size: 5rem;
-  line-height: 5rem;
+  font-size: 2rem;
+  line-height: 2rem;
   color: black;
 }
 
@@ -144,18 +141,20 @@ table p {
 
 .navigation {
   display: flex;
-  padding: .5rem 1rem;
-  background: #52525b;
-  color: #fff;
+  padding: 0 1rem;
+  background: #fff;
+  color: #000;
 }
 
 .navigation h1 {
   margin: 0 2rem 0 0;
+  display: flex;
+  align-items: center;
 }
 
 .navigation h1 a {
   text-decoration: none;
-  color: #fff;
+  color: #000;
 }
 
 .navigation .navigation-section {
@@ -178,17 +177,22 @@ table p {
 
 .navigation .navigation-section ul li a {
   display: inline-block;
-  padding: .5rem;
+  padding: 1rem;
   text-decoration: none;
-  color: #fff;
+  color: #000;
 }
 
-.navigation .navigation-section ul li.active a {
-  text-decoration: underline;
+.navigation .navigation-section ul li.active {
+  background: #e7e5e4;
 }
 
 @media screen and (max-width: 768px) {
-  .row {
+  .dashboard-row {
     flex-direction: column;
+  }
+
+  .dashboard-row .dashboard-stat {
+    border-right: none;
+    border-bottom: 1px solid #a8a29e;
   }
 }
