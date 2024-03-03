@@ -221,6 +221,15 @@ table p {
   margin: 0;
 }
 
+.lockers {
+  margin-top: 2rem;
+}
+
+.lockers .locker-process {
+  display: flex;
+  flex-direction: column;
+}
+
 @media screen and (max-width: 768px) {
   .dashboard-row {
     flex-direction: column;

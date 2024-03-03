@@ -8,6 +8,10 @@ module Que
         execute(fetch_dashboard_stats_sql)
       end
 
+      def fetch_que_lockers
+        execute(fetch_que_lockers_sql)
+      end
+
       def fetch_queue_names
         execute(fetch_queue_names_sql).map { |queues_data|
           ["#{queues_data[:queue_name]} (#{queues_data[:count_all]})", queues_data[:queue_name]]
@@ -85,6 +89,13 @@ module Que
             FROM pg_locks
             WHERE locktype = 'advisory'
           ) locks ON (que_jobs.id=locks.job_id)
+        SQL
+      end
+
+      def fetch_que_lockers_sql
+        <<-SQL.squish
+          SELECT *
+          FROM que_lockers
         SQL
       end
 
