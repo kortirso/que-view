@@ -53,15 +53,5 @@ Add this line to assets/config/manifest.js
 //= link que/view/application.css
 ```
 
-## TODO
-
-- [X] rescheduling jobs
-- [X] deleting jobs
-- [X] better styles for UI
-- [X] rendering running jobs
-- [ ] searching/filtering through jobs by name, queue
-- [X] pagination for jobs list page
-- [ ] tests
-
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

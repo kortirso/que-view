@@ -1,3 +1,11 @@
+<%= form_with url: jobs_path, method: :get, class: 'search-form' do |form| %>
+  <%= form.hidden_field :status, value: params[:status] %>
+  <div class="row">
+    <%= form.select :queue_name, options_for_select(@queue_names, params[:queue_name]), {}, class: 'form-select' %>
+    <%= form.select :job_name, options_for_select(@job_names, params[:job_name]), {}, class: 'form-select' %>
+    <%= form.submit 'Search', class: 'btn-primary' %>
+  </div>
+<% end %>
 <% if @jobs.any? %>
   <% if @pagination %>
     <div class="row pagination">
@@ -18,61 +26,57 @@
       <% end %>
     </div>
   <% end %>
-  <div class="row">
-    <table cellspacing="0">
-      <thead>
+  <table cellspacing="0" class="jobs-list">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Job</th>
+        <th>Queue</th>
+        <th>Run at</th>
+        <th>Arguments</th>
+        <% if params[:status] == 'failing' %>
+          <th>Failures</th>
+          <th>Error</th>
+        <% end %>
+        <% if %w[failing scheduled].include?(params[:status]) %>
+          <th>Actions</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @jobs.each do |job| %>
         <tr>
-          <th>ID</th>
-          <th>Run at</th>
-          <th>Job</th>
-          <th>Queue</th>
-          <th>Arguments</th>
+          <td><%= link_to job[:id], job_path(job[:id]) %></td>
+          <td><%= humanized_job_class(job) %></td>
+          <td><%= job[:queue] %></td>
+          <td><%= job[:run_at].strftime("%Y-%m-%d %H:%M:%S") %></td>
+          <td>
+            <% job.dig(:args, 0, :arguments).each do |argument| %>
+              <p><%= argument %></p>
+            <% end %>
+          </td>
           <% if params[:status] == 'failing' %>
-            <th>Failures</th>
-            <th>Error</th>
+            <td><%= job[:error_count] %></td>
+            <td><%= format_error(job) %></td>
           <% end %>
           <% if %w[failing scheduled].include?(params[:status]) %>
-            <th></th>
+            <td>
+              <div class="actions">
+                <%= button_to 'Run', job_path(job[:id]), class: 'btn-danger', method: :patch, onclick: "return confirm('Are you sure you wish to reschedule job?')" %>
+                <%= button_to 'Delete', job_path(job[:id]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete job?')" %>
+              </div>
+            </td>
           <% end %>
         </tr>
-      </thead>
-      <tbody>
-        <% @jobs.each do |job| %>
-          <tr>
-            <td><%= link_to job[:id], job_path(job[:id]) %></td>
-            <td><%= job[:run_at].strftime("%Y-%m-%d %H:%M:%S") %></td>
-            <td><%= humanized_job_class(job) %></td>
-            <td><%= job[:queue] %></td>
-            <td>
-              <% job.dig(:args, 0, :arguments).each do |argument| %>
-                <p><%= argument %></p>
-              <% end %>
-            </td>
-            <% if params[:status] == 'failing' %>
-              <td><%= job[:error_count] %></td>
-              <td><%= format_error(job) %></td>
-            <% end %>
-            <% if %w[failing scheduled].include?(params[:status]) %>
-              <td>
-                <div class="actions">
-                  <%= button_to 'Run', job_path(job[:id]), class: 'btn-danger', method: :patch, onclick: "return confirm('Are you sure you wish to reschedule job?')" %>
-                  <%= button_to 'Delete', job_path(job[:id]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete job?')" %>
-                </div>
-              </td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="row">
+    <%= button_to 'Run All', reschedule_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :post, onclick: "return confirm('Are you sure you wish to reschedule all jobs?')" %>
+    <%= button_to 'Delete All', destroy_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete all jobs?')" %>
   </div>
 <% else %>
   <div class="row">
     <p>No jobs found</p>
-  </div>
-<% end %>
-<% if @pagination&.count&.positive? %>
-  <div class="row">
-    <%= button_to 'Run All', reschedule_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :post, onclick: "return confirm('Are you sure you wish to reschedule all jobs?')" %>
-    <%= button_to 'Delete All', destroy_all_jobs_path(status: params[:status]), class: 'btn-danger', method: :delete, onclick: "return confirm('Are you sure you wish to delete all jobs?')" %>
   </div>
 <% end %>
