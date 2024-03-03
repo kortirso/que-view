@@ -5,6 +5,7 @@ module Que
     class WelcomeController < Que::View::ApplicationController
       def index
         @dashboard_stats = ::Que::View.fetch_dashboard_stats[0]
+        @lockers = ::Que::View.fetch_que_lockers
       end
     end
   end

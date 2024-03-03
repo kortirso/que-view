@@ -58,3 +58,29 @@
     <% end %>
   </div>
 </div>
+<div class="lockers">
+  <h1>Processes</h1>
+  <table cellspacing="0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Worker count</th>
+        <th>Worker priorities</th>
+        <th>Listening</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @lockers.each.with_index do |locker, index| %>
+        <tr>
+          <td class="locker-process">
+            <span>Process <%= index + 1 %></span>
+            <span><strong>Queues:</strong> <%= locker[:queues][1..-2].split(',').join(', ') %></span>
+          </td>
+          <td><%= locker[:worker_count] %></td>
+          <td><%= locker[:worker_priorities] %></td>
+          <td><%= locker[:listening] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
