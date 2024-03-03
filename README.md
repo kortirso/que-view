@@ -10,6 +10,8 @@ Benefits for using this one:
 
 <img width="1731" alt="Снимок экрана 2024-03-03 в 08 28 09" src="https://github.com/kortirso/que-view/assets/6195394/fdaf315d-6c6e-40ee-a60f-cd740cc7ec93">
 <img width="1734" alt="Снимок экрана 2024-03-03 в 08 27 47" src="https://github.com/kortirso/que-view/assets/6195394/e45d334e-7637-41f8-af16-d6a9ac35f263">
+<img width="1730" alt="Снимок экрана 2024-03-03 в 23 09 57" src="https://github.com/kortirso/que-view/assets/6195394/d790066f-3e96-4775-afd6-018750d0afd3">
+
 
 ## Installation
 
