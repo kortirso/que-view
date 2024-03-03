@@ -4,8 +4,20 @@ module Que
   module View
     # rubocop: disable Metrics/ClassLength
     class DSL
-      def fetch_dashboard_stats(...)
-        execute(fetch_dashboard_stats_sql(...))
+      def fetch_dashboard_stats
+        execute(fetch_dashboard_stats_sql)
+      end
+
+      def fetch_queue_names
+        execute(fetch_queue_names_sql).map { |queues_data|
+          ["#{queues_data[:queue_name]} (#{queues_data[:count_all]})", queues_data[:queue_name]]
+        }
+      end
+
+      def fetch_job_names(...)
+        execute(fetch_job_names_sql(...)).map { |jobs_data|
+          ["#{jobs_data[:job_name]} (#{jobs_data[:count_all]})", jobs_data[:job_name]]
+        }
       end
 
       def fetch_running_jobs(...)
@@ -18,6 +30,14 @@ module Que
 
       def fetch_scheduled_jobs(...)
         execute(fetch_scheduled_jobs_sql(...))
+      end
+
+      def fetch_finished_jobs(...)
+        execute(fetch_finished_jobs_sql(...))
+      end
+
+      def fetch_expired_jobs(...)
+        execute(fetch_expired_jobs_sql(...))
       end
 
       def fetch_job(...)
@@ -51,7 +71,7 @@ module Que
       private
 
       # rubocop: disable Metrics/MethodLength
-      def fetch_dashboard_stats_sql(search)
+      def fetch_dashboard_stats_sql
         <<-SQL.squish
           SELECT count(*) AS total,
                  count(locks.job_id) AS running,
@@ -65,34 +85,68 @@ module Que
             FROM pg_locks
             WHERE locktype = 'advisory'
           ) locks ON (que_jobs.id=locks.job_id)
-          WHERE
-            job_class ILIKE ('#{search}')
-            OR que_jobs.args #>> '{0, job_class}' ILIKE ('#{search}')
         SQL
       end
 
-      def fetch_failing_jobs_sql(per_page, offset, search)
+      def fetch_queue_names_sql
         <<-SQL.squish
-          SELECT que_jobs.*
+          SELECT COUNT(*) AS count_all, queue AS queue_name
           FROM que_jobs
-          LEFT JOIN (
-            SELECT (classid::bigint << 32) + objid::bigint AS job_id
-            FROM pg_locks
-            WHERE locktype = 'advisory'
-          ) locks ON (que_jobs.id=locks.job_id)
+          GROUP BY queue
+        SQL
+      end
+
+      def fetch_job_names_sql(queue_name)
+        <<-SQL.squish
+          SELECT COUNT(*) AS count_all, args #>> '{0, job_class}' AS job_name
+          FROM que_jobs
+          #{queue_name.present? ? "WHERE queue = '#{queue_name}'" : ""}
+          GROUP BY args #>> '{0, job_class}'
+        SQL
+      end
+
+      def fetch_failing_jobs_sql(per_page, offset, params)
+        where_condition = <<-SQL.squish
           WHERE locks.job_id IS NULL
             AND error_count > 0
-            AND (
-              job_class ILIKE ('#{search}')
-              OR que_jobs.args #>> '{0, job_class}' ILIKE ('#{search}')
-            )
-          ORDER BY run_at, id
-          LIMIT #{per_page}::int
-          OFFSET #{offset}::int
+            #{search_condition(params)}
         SQL
+        fetch_jobs_sql(per_page, offset, where_condition)
       end
 
-      def fetch_scheduled_jobs_sql(per_page, offset, search)
+      def fetch_scheduled_jobs_sql(per_page, offset, params)
+        where_condition = <<-SQL.squish
+          WHERE locks.job_id IS NULL
+            AND error_count = 0
+            #{search_condition(params)}
+        SQL
+        fetch_jobs_sql(per_page, offset, where_condition)
+      end
+
+      def fetch_finished_jobs_sql(per_page, offset, params)
+        where_condition = <<-SQL.squish
+          WHERE finished_at IS NOT NULL
+            #{search_condition(params)}
+        SQL
+        fetch_jobs_sql(per_page, offset, where_condition)
+      end
+
+      def fetch_expired_jobs_sql(per_page, offset, params)
+        where_condition = <<-SQL.squish
+          WHERE expired_at IS NOT NULL
+            #{search_condition(params)}
+        SQL
+        fetch_jobs_sql(per_page, offset, where_condition)
+      end
+
+      def search_condition(params)
+        result = ''
+        result += "AND queue = '#{params[:queue_name]}'" if params[:queue_name].present?
+        result += "AND args #>> '{0, job_class}' = ('#{params[:job_name]}')" if params[:job_name].present?
+        result
+      end
+
+      def fetch_jobs_sql(per_page, offset, where_condition)
         <<-SQL.squish
           SELECT que_jobs.*
           FROM que_jobs
@@ -101,12 +155,7 @@ module Que
             FROM pg_locks
             WHERE locktype = 'advisory'
           ) locks ON (que_jobs.id=locks.job_id)
-          WHERE locks.job_id IS NULL
-            AND error_count = 0
-            AND (
-              job_class ILIKE ('#{search}')
-              OR que_jobs.args #>> '{0, job_class}' ILIKE ('#{search}')
-            )
+          #{where_condition}
           ORDER BY run_at, id
           LIMIT #{per_page}::int
           OFFSET #{offset}::int

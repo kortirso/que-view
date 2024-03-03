@@ -5,10 +5,12 @@ module Que
     class JobsController < Que::View::ApplicationController
       PER_PAGE = 20
 
+      before_action :find_queue_names, only: %i[index]
+      before_action :find_job_names, only: %i[index]
       before_action :find_job, only: %i[show]
 
       def index
-        @jobs = find_jobs(params[:status])
+        @jobs = find_jobs(index_params)
         paginate
       end
 
@@ -48,6 +50,25 @@ module Que
 
       private
 
+      def find_queue_names
+        @queue_names = [
+          ['All queues', nil]
+        ] + ::Que::View.fetch_queue_names
+      end
+
+      def find_job_names
+        @job_names = [
+          ['All jobs', nil]
+        ] + ::Que::View.fetch_job_names(params[:queue_name])
+      end
+
+      def find_job
+        @job = ::Que::View.fetch_job(params[:id])[0]
+        return if @job
+
+        redirect_to root_path, notice: 'Job is not found'
+      end
+
       def paginate
         return if %w[failing scheduled].exclude?(params[:status])
         return unless @jobs.any?
@@ -61,24 +82,19 @@ module Que
         )
       end
 
-      def find_job
-        @job = ::Que::View.fetch_job(params[:id])[0]
-        return if @job
-
-        redirect_to root_path, notice: 'Job is not found'
-      end
-
-      def find_jobs(status)
-        case status&.to_sym
-        when :running then ::Que::View.fetch_running_jobs(search)
-        when :failing then ::Que::View.fetch_failing_jobs(PER_PAGE, offset, search)
-        when :scheduled then ::Que::View.fetch_scheduled_jobs(PER_PAGE, offset, search)
+      def find_jobs(params)
+        case params[:status]&.to_sym
+        when :running then ::Que::View.fetch_running_jobs(params)
+        when :failing then ::Que::View.fetch_failing_jobs(PER_PAGE, offset, params)
+        when :scheduled then ::Que::View.fetch_scheduled_jobs(PER_PAGE, offset, params)
+        when :finished then ::Que::View.fetch_finished_jobs(PER_PAGE, offset, params)
+        when :expired then ::Que::View.fetch_expired_jobs(PER_PAGE, offset, params)
         else []
         end
       end
 
       def find_jobs_total_amount(status)
-        ::Que::View.fetch_dashboard_stats(search)[0][status&.to_sym]
+        ::Que::View.fetch_dashboard_stats[0][status&.to_sym]
       end
 
       def reschedule_all_jobs(status, time)
@@ -97,25 +113,16 @@ module Que
         end
       end
 
-      def search
-        return '%' unless search_param
-
-        "%#{search_param}%"
-      end
-
-      def search_param
-        sanitised = (params[:search] || '').gsub(/[^0-9a-z:]/i, '')
-        return if sanitised.empty?
-
-        sanitised
-      end
-
       def offset
         (page - 1) * PER_PAGE
       end
 
       def page
         (params[:page] || 1).to_i
+      end
+
+      def index_params
+        params.permit(:status, :queue_name, :job_name).to_h.symbolize_keys
       end
     end
   end
