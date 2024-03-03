@@ -84,7 +84,7 @@ module Que
 
       def find_jobs(params)
         case params[:status]&.to_sym
-        when :running then ::Que::View.fetch_running_jobs(params)
+        when :running then ::Que::View.fetch_running_jobs
         when :failing then ::Que::View.fetch_failing_jobs(PER_PAGE, offset, params)
         when :scheduled then ::Que::View.fetch_scheduled_jobs(PER_PAGE, offset, params)
         when :finished then ::Que::View.fetch_finished_jobs(PER_PAGE, offset, params)

@@ -1,0 +1,29 @@
+<div class="metrics">
+  <h1>Queue Metrics</h1>
+  <table cellspacing="0">
+    <thead>
+      <tr>
+        <th>Queue</th>
+        <th>Scheduled</th>
+        <th>Failing</th>
+        <th>Running</th>
+        <th>Finished</th>
+        <th>Expired</th>
+        <th>Latency</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @queue_metrics.each do |queue, values| %>
+        <tr>
+          <td><%= queue %></td>
+          <td><%= link_to values[:scheduled], jobs_path(status: 'scheduled', queue_name: queue) %></td>
+          <td><%= link_to values[:failing], jobs_path(status: 'failing', queue_name: queue) %></td>
+          <td><%= link_to values[:running], jobs_path(status: 'running', queue_name: queue) %></td>
+          <td><%= link_to values[:finished], jobs_path(status: 'finished', queue_name: queue) %></td>
+          <td><%= link_to values[:expired], jobs_path(status: 'expired', queue_name: queue) %></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

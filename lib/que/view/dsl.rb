@@ -12,6 +12,13 @@ module Que
         execute(fetch_que_lockers_sql)
       end
 
+      def fetch_queue_metrics
+        execute(fetch_queue_metrics_sql).each_with_object({}) { |element, acc|
+          acc[element[:queue_name].to_sym] ||= basis_queue_stats
+          acc[element[:queue_name].to_sym][element[:status].to_sym] = element[:count_all]
+        }
+      end
+
       def fetch_queue_names
         execute(fetch_queue_names_sql).map { |queues_data|
           ["#{queues_data[:queue_name]} (#{queues_data[:count_all]})", queues_data[:queue_name]]
@@ -24,7 +31,7 @@ module Que
         }
       end
 
-      def fetch_running_jobs(...)
+      def fetch_running_jobs
         Que.job_states
       end
 
@@ -74,6 +81,10 @@ module Que
 
       private
 
+      def basis_queue_stats
+        { scheduled: 0, failing: 0, running: 0, finished: 0, expired: 0 }
+      end
+
       # rubocop: disable Metrics/MethodLength
       def fetch_dashboard_stats_sql
         <<-SQL.squish
@@ -96,6 +107,33 @@ module Que
         <<-SQL.squish
           SELECT *
           FROM que_lockers
+        SQL
+      end
+
+      def fetch_queue_metrics_sql
+        <<-SQL.squish
+          SELECT COUNT(*) AS count_all, queue AS queue_name,
+            CASE
+            WHEN expired_at IS NOT NULL THEN 'expired'
+            WHEN finished_at IS NOT NULL THEN 'finished'
+            WHEN locks.job_id IS NULL AND error_count > 0 THEN 'failing'
+            WHEN locks.job_id IS NULL AND error_count = 0 THEN 'scheduled'
+            ELSE 'running'
+            END status
+          FROM que_jobs
+          LEFT JOIN (
+            SELECT (classid::bigint << 32) + objid::bigint AS job_id
+            FROM pg_locks
+            WHERE locktype = 'advisory'
+          ) locks ON (que_jobs.id=locks.job_id)
+          GROUP BY queue,
+            CASE
+            WHEN expired_at IS NOT NULL THEN 'expired'
+            WHEN finished_at IS NOT NULL THEN 'finished'
+            WHEN locks.job_id IS NULL AND error_count > 0 THEN 'failing'
+            WHEN locks.job_id IS NULL AND error_count = 0 THEN 'scheduled'
+            ELSE 'running'
+            END
         SQL
       end
 

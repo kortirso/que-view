@@ -26,6 +26,9 @@
           <li class="<%= 'active' if params[:status] == 'expired' %>">
             <%= link_to 'Expired', jobs_path(status: 'expired') %>
           </li>
+          <li class="<%= 'active' if current_page?(queue_metrics_path) %>">
+            <%= link_to 'Queue metrics', queue_metrics_path %>
+          </li>
         </ul>
         <ul class="version">
           <li>Que <%= Que::VERSION %></li>
