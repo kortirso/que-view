@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased
 ### Added
 - rendering processes
+- queue metrics page
 
 ## [0.3.1] - 2024-03-03
 ### Added
