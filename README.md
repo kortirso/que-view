@@ -4,13 +4,12 @@ SQL queries came from Que::Web, some styling from there too.
 
 Benefits for using this one:
 - no Sinatra (que-web based on Sinatra),
-- no Foundation for styles,
-- no jQuery,
+- no Foundation for styles (and no external styles at all),
+- no jQuery (and no java scripts at all),
 - Que::Web was last updated 2 years ago.
 
-<img width="1735" alt="Снимок экрана 2024-02-21 в 15 10 35" src="https://github.com/kortirso/que-view/assets/6195394/cd2812c7-abb0-48d9-92d5-4dbef93bcd9e">
-<img width="1735" alt="Снимок экрана 2024-02-21 в 15 11 12" src="https://github.com/kortirso/que-view/assets/6195394/8af01e7f-a002-4ef1-aeff-f96fd27c639f">
-
+<img width="1731" alt="Снимок экрана 2024-03-03 в 08 28 09" src="https://github.com/kortirso/que-view/assets/6195394/fdaf315d-6c6e-40ee-a60f-cd740cc7ec93">
+<img width="1734" alt="Снимок экрана 2024-03-03 в 08 27 47" src="https://github.com/kortirso/que-view/assets/6195394/e45d334e-7637-41f8-af16-d6a9ac35f263">
 
 ## Installation
 
