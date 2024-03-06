@@ -19,6 +19,10 @@ module Que
         }
       end
 
+      def fetch_queue_latencies(queue_names)
+        queue_names.index_with { |queue_name| execute(fetch_queue_oldest_job_sql(queue_name)).dig(0, :enqueued_at) }
+      end
+
       def fetch_queue_names
         execute(fetch_queue_names_sql).map { |queues_data|
           ["#{queues_data[:queue_name]} (#{queues_data[:count_all]})", queues_data[:queue_name]]
@@ -134,6 +138,18 @@ module Que
             WHEN locks.job_id IS NULL AND error_count = 0 THEN 'scheduled'
             ELSE 'running'
             END
+        SQL
+      end
+
+      def fetch_queue_oldest_job_sql(queue_name)
+        <<-SQL.squish
+          SELECT args #>> '{0, enqueued_at}' AS enqueued_at
+          FROM que_jobs
+          WHERE queue = '#{queue_name}'
+            AND expired_at IS NULL
+            AND finished_at IS NULL
+          ORDER BY args #>> '{0, enqueued_at}'
+          LIMIT 1
         SQL
       end
 

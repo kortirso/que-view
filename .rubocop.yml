@@ -41,6 +41,9 @@ Layout/LineLength:
 Layout/SpaceAroundEqualsInParameterDefault:
   EnforcedStyle: no_space
 
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
 Gemspec/RequireMFA:
   Enabled: false
 
