@@ -7,7 +7,7 @@
     <%= form.submit 'Search', class: 'btn-primary' %>
   </div>
 <% end %>
-<% if @pagination %>
+<% if @pagination && @pagination.total_pages > 1 %>
   <div class="row pagination">
     <% if @pagination.previous_page? %>
       <%= link_to 'First', jobs_path(status: params[:status], page: 1), class: 'pagination-link' %>

@@ -19,6 +19,10 @@
         <td><%= @job[:priority] %></td>
       </tr>
       <tr>
+        <th>Enqueued at</th>
+        <td><%= @job.dig(:args, 0, :enqueued_at).to_time.strftime("%Y-%m-%d %H:%M:%S") %></td>
+      </tr>
+      <tr>
         <th>Run at</th>
         <td><%= @job[:run_at].strftime("%Y-%m-%d %H:%M:%S") %></td>
       </tr>

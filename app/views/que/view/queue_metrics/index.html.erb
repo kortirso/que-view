@@ -9,7 +9,7 @@
         <th>Running</th>
         <th>Finished</th>
         <th>Expired</th>
-        <th>Latency</th>
+        <th>Latency (seconds)</th>
       </tr>
     </thead>
     <tbody>
@@ -21,7 +21,7 @@
           <td><%= link_to values[:running], jobs_path(status: 'running', queue_name: queue) %></td>
           <td><%= link_to values[:finished], jobs_path(status: 'finished', queue_name: queue) %></td>
           <td><%= link_to values[:expired], jobs_path(status: 'expired', queue_name: queue) %></td>
-          <td></td>
+          <td><%= @queue_latencies[queue] %></td>
         </tr>
       <% end %>
     </tbody>
