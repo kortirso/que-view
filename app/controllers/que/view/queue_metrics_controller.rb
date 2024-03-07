@@ -19,7 +19,7 @@ module Que
         @queue_latencies =
           ::Que::View
             .fetch_queue_latencies(@queue_metrics.keys)
-            .transform_values { |value| current_time - value.to_time.to_i }
+            .transform_values { |value| value ? (current_time - value.to_time.to_i) : 0 }
       end
     end
   end
