@@ -45,7 +45,7 @@ end
 Add this line to config/routes.rb
 
 ```ruby
-mount Que::Web::Engine => '/que_web'
+mount Que::View::Engine => '/que_view'
 ```
 
 Add this line to assets/config/manifest.js
