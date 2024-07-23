@@ -22,7 +22,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'que', '> 2.0'
   spec.add_dependency 'rails', '> 6.0.0'
-  spec.add_dependency 'sassc-rails'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'pg', '> 1.0'
