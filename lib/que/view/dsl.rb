@@ -95,7 +95,7 @@ module Que
           SELECT count(*) AS total,
                  count(locks.job_id) AS running,
                  coalesce(sum((error_count > 0 AND locks.job_id IS NULL AND expired_at IS NULL)::int), 0) AS failing,
-                 coalesce(sum((error_count = 0 AND locks.job_id IS NULL)::int), 0) AS scheduled,
+                 coalesce(sum((error_count = 0 AND locks.job_id IS NULL AND finished_at IS NULL AND expired_at IS NULL)::int), 0) AS scheduled,
                  coalesce(sum((finished_at IS NOT NULL)::int), 0) AS finished,
                  coalesce(sum((expired_at IS NOT NULL)::int), 0) AS expired
           FROM que_jobs
@@ -121,7 +121,7 @@ module Que
             WHEN expired_at IS NOT NULL THEN 'expired'
             WHEN finished_at IS NOT NULL THEN 'finished'
             WHEN locks.job_id IS NULL AND error_count > 0 AND expired_at IS NULL THEN 'failing'
-            WHEN locks.job_id IS NULL AND error_count = 0 THEN 'scheduled'
+            WHEN locks.job_id IS NULL AND error_count = 0 AND finished_at IS NULL AND expired_at IS NULL THEN 'scheduled'
             ELSE 'running'
             END status
           FROM que_jobs
@@ -135,7 +135,7 @@ module Que
             WHEN expired_at IS NOT NULL THEN 'expired'
             WHEN finished_at IS NOT NULL THEN 'finished'
             WHEN locks.job_id IS NULL AND error_count > 0 AND expired_at IS NULL THEN 'failing'
-            WHEN locks.job_id IS NULL AND error_count = 0 THEN 'scheduled'
+            WHEN locks.job_id IS NULL AND error_count = 0 AND finished_at IS NULL AND expired_at IS NULL THEN 'scheduled'
             ELSE 'running'
             END
         SQL

@@ -6,7 +6,11 @@ require_relative 'dummy/config/environment'
 require_relative 'support/auth_helper'
 
 require 'rspec/rails'
+require 'factory_bot_rails'
 require 'database_cleaner'
+
+FactoryBot.definition_file_paths << File.join(File.dirname(__FILE__), 'factories')
+FactoryBot.find_definitions
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -20,6 +24,7 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  config.include FactoryBot::Syntax::Methods
   config.include AuthHelper, type: :controller
 
   config.before(:suite) do

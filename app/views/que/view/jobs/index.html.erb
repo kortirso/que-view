@@ -1,4 +1,4 @@
-<h1><%= params[:status].capitalize %> jobs</h1>
+<h1><%= params[:status]&.capitalize %> jobs</h1>
 <%= form_with url: jobs_path, method: :get, class: 'search-form' do |form| %>
   <%= form.hidden_field :status, value: params[:status] %>
   <div class="row">
