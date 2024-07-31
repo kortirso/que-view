@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 20 } %>
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: que-view_dummy_development
+
+test:
+  <<: *default
+  database: que-view_dummy_test
+
+production:
+  <<: *default
+  database: que-view_dummy_production
+  username: dummy
+  password: <%= ENV['QUE_VIEW_DUMMY_DATABASE_PASSWORD'] %>
