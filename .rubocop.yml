@@ -1,6 +1,9 @@
 require:
   - rubocop-performance
+  - rubocop-factory_bot
   - rubocop-rake
+  - rubocop-rspec
+  - rubocop-rspec_rails
 
 AllCops:
   Exclude:
@@ -52,3 +55,22 @@ Gemspec/DevelopmentDependencies:
 
 Metrics/MethodLength:
   Max: 11
+
+RSpec/ExampleLength:
+  Max: 20
+
+RSpec/NestedGroups:
+  Max: 8
+
+RSpec/ContextWording:
+  Prefixes:
+    - when
+    - with
+    - without
+    - and
+    - if
+    - in
+    - for
+
+FactoryBot/ConsistentParenthesesStyle:
+  Enabled: false
