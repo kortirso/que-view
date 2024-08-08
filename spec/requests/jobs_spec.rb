@@ -15,6 +15,7 @@ describe 'Jobs' do
         create :que_job
         create :que_job, :with_positional_argument
         create :que_job, :with_keyword_argument
+        create :que_job, :with_que_argument
 
         get '/que-view/jobs?status=scheduled'
       end

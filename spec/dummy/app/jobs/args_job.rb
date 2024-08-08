@@ -3,5 +3,5 @@
 class ArgsJob < ApplicationJob
   queue_as :default
 
-  def perform(options); end
+  def perform(*options); end
 end

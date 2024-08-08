@@ -76,5 +76,11 @@ FactoryBot.define do
         ]
       }
     end
+
+    trait :with_que_argument do
+      job_class { 'SimpleQueJob' }
+      args { ['value'] }
+      kwargs { { id: 1 } }
+    end
   end
 end

@@ -20,7 +20,7 @@
       </tr>
       <tr>
         <th>Enqueued at</th>
-        <td><%= @job.dig(:args, 0, :enqueued_at).to_time.strftime('%Y-%m-%d %H:%M:%S') %></td>
+        <td><%= humanized_enqueued_at(@job) %></td>
       </tr>
       <tr>
         <th>Run at</th>
@@ -33,9 +33,7 @@
       <tr>
         <th>Args</th>
         <td>
-          <% Array(@job.dig(:args, 0, :arguments)).each do |argument| %>
-            <p><%= argument %></p>
-          <% end %>
+          <%= humanized_job_args(@job) %>
         </td>
       </tr>
       <tr>
