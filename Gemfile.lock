@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    que-view (0.4.0)
+    que-view (0.4.1)
       que (> 2.0)
       rails (> 6.0.0)
 
