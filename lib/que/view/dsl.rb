@@ -163,10 +163,17 @@ module Que
 
       def fetch_job_names_sql(queue_name)
         <<-SQL.squish
-          SELECT COUNT(*) AS count_all, args #>> '{0, job_class}' AS job_name
+          SELECT COUNT(*) AS count_all,
+            CASE
+              WHEN job_class = 'ActiveJob::QueueAdapters::QueAdapter::JobWrapper' THEN args #>> '{0, job_class}'
+              ELSE job_class 
+            END AS job_name
           FROM que_jobs
           #{queue_name.present? ? "WHERE queue = '#{queue_name}'" : ""}
-          GROUP BY args #>> '{0, job_class}'
+          GROUP BY CASE
+            WHEN job_class = 'ActiveJob::QueueAdapters::QueAdapter::JobWrapper' THEN args #>> '{0, job_class}'
+            ELSE job_class
+          END
         SQL
       end
 
@@ -208,7 +215,17 @@ module Que
       def search_condition(params)
         result = ''
         result += "AND queue = '#{params[:queue_name]}'" if params[:queue_name].present?
-        result += "AND args #>> '{0, job_class}' = ('#{params[:job_name]}')" if params[:job_name].present?
+        if params[:job_name].present?
+          result += <<~SQL
+            AND (
+              job_class = '#{params[:job_name]}'
+              OR (
+                job_class = 'ActiveJob::QueueAdapters::QueAdapter::JobWrapper'
+                AND args #>> '{0, job_class}' = '#{params[:job_name]}'
+              )
+            )
+          SQL
+        end
         result
       end
 
