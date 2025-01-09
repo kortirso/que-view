@@ -166,7 +166,7 @@ module Que
           SELECT COUNT(*) AS count_all,
             CASE
               WHEN job_class = 'ActiveJob::QueueAdapters::QueAdapter::JobWrapper' THEN args #>> '{0, job_class}'
-              ELSE job_class 
+              ELSE job_class
             END AS job_name
           FROM que_jobs
           #{queue_name.present? ? "WHERE queue = '#{queue_name}'" : ""}
