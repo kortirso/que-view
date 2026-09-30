@@ -23,8 +23,8 @@ module Que
         queue_names.index_with { |queue_name| execute(fetch_queue_oldest_job_sql(queue_name)).dig(0, :enqueued_at) }
       end
 
-      def fetch_queue_names
-        execute(fetch_queue_names_sql).map { |queues_data|
+      def fetch_queue_names(status = nil)
+        execute(fetch_queue_names_sql(status)).map { |queues_data|
           ["#{queues_data[:queue_name]} (#{queues_data[:count_all]})", queues_data[:queue_name]]
         }
       end
@@ -153,15 +153,21 @@ module Que
         SQL
       end
 
-      def fetch_queue_names_sql
+      def fetch_queue_names_sql(status)
         <<-SQL.squish
           SELECT COUNT(*) AS count_all, queue AS queue_name
           FROM que_jobs
+          LEFT JOIN (
+            SELECT (classid::bigint << 32) + objid::bigint AS job_id
+            FROM pg_locks
+            WHERE locktype = 'advisory'
+          ) locks ON (que_jobs.id=locks.job_id)
+          WHERE true #{status_condition(status)}
           GROUP BY queue
         SQL
       end
 
-      def fetch_job_names_sql(queue_name)
+      def fetch_job_names_sql(queue_name, status)
         <<-SQL.squish
           SELECT COUNT(*) AS count_all,
             CASE
@@ -169,12 +175,30 @@ module Que
               ELSE job_class
             END AS job_name
           FROM que_jobs
-          #{queue_name.present? ? "WHERE queue = '#{queue_name}'" : ""}
+          LEFT JOIN (
+            SELECT (classid::bigint << 32) + objid::bigint AS job_id
+            FROM pg_locks
+            WHERE locktype = 'advisory'
+          ) locks ON (que_jobs.id=locks.job_id)
+          WHERE true
+            #{status_condition(status)}
+            #{queue_name.present? ? "AND queue = '#{queue_name}'" : ""}
           GROUP BY CASE
             WHEN job_class = 'ActiveJob::QueueAdapters::QueAdapter::JobWrapper' THEN args #>> '{0, job_class}'
             ELSE job_class
           END
         SQL
+      end
+
+      def status_condition(status)
+        case status&.to_sym
+        when :running then 'AND locks.job_id IS NOT NULL'
+        when :failing then 'AND locks.job_id IS NULL AND error_count > 0 AND expired_at IS NULL'
+        when :scheduled then 'AND locks.job_id IS NULL AND error_count = 0'
+        when :finished then 'AND finished_at IS NOT NULL'
+        when :expired then 'AND expired_at IS NOT NULL'
+        else ''
+        end
       end
 
       def fetch_failing_jobs_sql(per_page, offset, params)

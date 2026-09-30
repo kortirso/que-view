@@ -53,13 +53,13 @@ module Que
       def find_queue_names
         @queue_names = [
           ['All queues', nil]
-        ] + ::Que::View.fetch_queue_names
+        ] + ::Que::View.fetch_queue_names(params[:status])
       end
 
       def find_job_names
         @job_names = [
           ['All jobs', nil]
-        ] + ::Que::View.fetch_job_names(params[:queue_name])
+        ] + ::Que::View.fetch_job_names(params[:queue_name], params[:status])
       end
 
       def find_job
